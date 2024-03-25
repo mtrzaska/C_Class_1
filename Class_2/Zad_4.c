@@ -1,42 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
-struct Student {
-    char imie[50];
-    float ocena;
-};
+#define STUDENTS_COUNT 100
+#define NAME_LENGTH 50
 
-void sortujStudentow(struct Student *tablica, int rozmiar) {
-    int i, j;
-    struct Student temp;
+// Definicja struktury Student
+typedef struct {
+    char name[NAME_LENGTH];
+    float finalGrade;
+} Student;
 
-    for (i = 0; i < rozmiar - 1; i++) {
-        for (j = 0; j < rozmiar - 1 - i; j++) {
-            if (tablica[j].ocena < tablica[j + 1].ocena) {
-                temp = tablica[j];
-                tablica[j] = tablica[j + 1];
-                tablica[j + 1] = temp;
+// Funkcja sortująca
+void sortStudents(Student *students, int size) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (students[j].finalGrade < students[j + 1].finalGrade) {
+                // Zamiana miejscami
+                Student temp = students[j];
+                students[j] = students[j + 1];
+                students[j + 1] = temp;
             }
         }
     }
 }
 
 int main() {
-    const int liczba_studentow = 100;
-    struct Student studenci[liczba_studentow];
-
+    // Inicjalizacja generatora liczb losowych
     srand(time(NULL));
-    for (int i = 0; i < liczba_studentow; i++) {
-        sprintf(studenci[i].imie, "Student%d", i + 1);
-        studenci[i].ocena = (float)(rand() % 101) / 10.0; 
+
+    // Inicjalizacja tablicy struktur Student przykładowymi danymi
+    Student students[STUDENTS_COUNT];
+    for (int i = 0; i < STUDENTS_COUNT; i++) {
+        snprintf(students[i].name, NAME_LENGTH, "Student%d", i + 1);
+        // Generowanie losowej oceny z zakresu 2.00 do 5.00
+        students[i].finalGrade = 2.0f + (float)(rand() % 301) / 100.0f;
     }
 
-    sortujStudentow(studenci, liczba_studentow);
+    // Sortowanie studentów według ocen końcowych w porządku malejącym
+    sortStudents(students, STUDENTS_COUNT);
 
-    printf("Posortowana lista studentow:\n");
-    for (int i = 0; i < liczba_studentow; i++) {
-        printf("Student: %s, Ocena: %.1f\n", studenci[i].imie, studenci[i].ocena);
+    // Wypisanie posortowanej listy studentów
+    for (int i = 0; i < STUDENTS_COUNT; i++) {
+        printf("%s: %.2f\n", students[i].name, students[i].finalGrade);
     }
 
     return 0;
