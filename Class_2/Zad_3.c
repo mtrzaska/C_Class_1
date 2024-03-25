@@ -1,44 +1,48 @@
 #include <stdio.h>
 
-struct Point {
-    int x;
-    int y;
-};
+// Definicja struktury Point
+typedef struct {
+    float x, y;
+} Point;
 
-void zmienWspolrzedne(struct Point *point, int newX, int newY) {
-    point->x = newX;
-    point->y = newY;
+// Funkcja do zmiany wartości współrzędnych punktu
+void changePoint(Point *p, float x, float y) {
+    p->x = x;
+    p->y = y;
 }
 
-struct Rectangle {
-    struct Point topleft;     
-    struct Point bottomright; 
-};
+// Definicja struktury Rectangle
+typedef struct {
+    Point topLeft;     // Lewy górny róg
+    Point bottomRight; // Prawy dolny róg
+} Rectangle;
 
-int poleProstokata(struct Rectangle *rect) {
-    int szerokosc = rect->bottomright.x - rect->topleft.x;
-    int wysokosc = rect->topleft.y - rect->bottomright.y;
-    return szerokosc * wysokosc;
+// Funkcja obliczająca pole prostokąta
+float rectangleArea(Rectangle r) {
+    float width = r.bottomRight.x - r.topLeft.x;
+    float height = r.topLeft.y - r.bottomRight.y;
+    return width * height;
 }
 
-int obwodProstokata(struct Rectangle *rect) {
-    int szerokosc = rect->bottomright.x - rect->topleft.x;
-    int wysokosc = rect->topleft.y - rect->bottomright.y;
-    return 2 * (szerokosc + wysokosc);
+// Funkcja obliczająca obwód prostokąta
+float rectanglePerimeter(Rectangle r) {
+    float width = r.bottomRight.x - r.topLeft.x;
+    float height = r.topLeft.y - r.bottomRight.y;
+    return 2 * (width + height);
 }
 
 int main() {
-    struct Point punkt = {3, 5};
+    // Utworzenie i zmiana współrzędnych punktu
+    Point p = {0, 0};
+    changePoint(&p, 5.0, 10.0);
+    printf("Zmienione współrzędne punktu: x = %.2f, y = %.2f\n", p.x, p.y);
 
-    zmienWspolrzedne(&punkt, 7, 9);
-
-    printf("Nowe wspolrzedne punktu: (%d, %d)\n", punkt.x, punkt.y);
-
-    struct Rectangle prostokat = {{2, 4}, {8, 1}};
-
-    printf("Pole prostokata: %d\n", poleProstokata(&prostokat));
-
-    printf("Obwod prostokata: %d\n", obwodProstokata(&prostokat));
+    // Utworzenie prostokąta i obliczenie jego pola i obwodu
+    Rectangle rect = {{0, 10}, {10, 0}};
+    float area = rectangleArea(rect);
+    float perimeter = rectanglePerimeter(rect);
+    printf("Pole prostokąta: %.2f\n", area);
+    printf("Obwód prostokąta: %.2f\n", perimeter);
 
     return 0;
 }
